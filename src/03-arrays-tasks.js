@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* ********************************************************************************************
  *                                                                                            *
  * Plese read the following tutorial before implementing tasks:                               *
@@ -20,8 +21,14 @@
  *    ['Array', 'Number', 'string'], 'Date'    => -1
  *    [0, 1, 2, 3, 4, 5], 5    => 5
  */
-function findElement(/* arr, value */) {
-  throw new Error('Not implemented');
+// eslint-disable-next-line no-unused-vars
+function findElement(arr, value) {
+  // eslint-disable-next-line prefer-const
+  let num = -1;
+  // eslint-disable-next-line no-eval
+  eval('for(let i = 0; i<arr.length; i++){if (arr[i]==value){num = i;break;}}');
+  // for (let i = 0; i < arr.length; i += 1) { if (arr[i] === value) { num = i; break; } }
+  return num;
 }
 
 /**
