@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable linebreak-style */
 /* *******************************************************************************************
  *                                                                                           *
@@ -97,8 +98,8 @@ function getFirstChar(v) {
  *   'cat'              => 'cat'
  *   '\tHello, World! ' => 'Hello, World!'
  */
-function removeLeadingAndTrailingWhitespaces(/* value */) {
-  throw new Error('Not implemented');
+function removeLeadingAndTrailingWhitespaces(v) {
+  return v.trim();
 }
 
 /**
@@ -112,8 +113,12 @@ function removeLeadingAndTrailingWhitespaces(/* value */) {
  *   'A', 5  => 'AAAAA'
  *   'cat', 3 => 'catcatcat'
  */
-function repeatString(/* value, count */) {
-  throw new Error('Not implemented');
+function repeatString(e, c) {
+  let s = '';
+  for (let i = 0; i < c; i++) {
+    s += e;
+  }
+  return s;
 }
 
 /**
@@ -128,8 +133,8 @@ function repeatString(/* value, count */) {
  *   'I like legends', 'end' => 'I like legs',
  *   'ABABAB','BA' => 'ABAB'
  */
-function removeFirstOccurrences(/* str, value */) {
-  throw new Error('Not implemented');
+function removeFirstOccurrences(str, value) {
+  return str.slice(0, str.indexOf(value)) + str.slice(str.indexOf(value) + value.length);
 }
 
 /**
@@ -143,8 +148,8 @@ function removeFirstOccurrences(/* str, value */) {
  *   '<span>' => 'span'
  *   '<a>' => 'a'
  */
-function unbracketTag(/* str */) {
-  throw new Error('Not implemented');
+function unbracketTag(str) {
+  return str.slice(1, -1);
 }
 
 
@@ -158,8 +163,8 @@ function unbracketTag(/* str */) {
  *   'Thunderstruck' => 'THUNDERSTRUCK'
  *  'abcdefghijklmnopqrstuvwxyz' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
  */
-function convertToUpperCase(/* str */) {
-  throw new Error('Not implemented');
+function convertToUpperCase(str) {
+  return str.toUpperCase();
 }
 
 /**
@@ -177,8 +182,8 @@ function convertToUpperCase(/* str */) {
  *   ],
  *   'info@gmail.com' => ['info@gmail.com']
  */
-function extractEmails(/* str */) {
-  throw new Error('Not implemented');
+function extractEmails(str) {
+  return str.split(';');
 }
 
 /**
@@ -204,8 +209,18 @@ function extractEmails(/* str */) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  let str = '';
+  for (let j = 0; j < height; j++) {
+    if (j === 0) {
+      str += `${'┌'}${'─'.repeat(width - 2)}${'┐\n'}`;
+    } else if (j !== (height - 1)) {
+      str += `${'│'}${' '.repeat(width - 2)}${'│\n'}`;
+    } else {
+      str += `${'└'}${'─'.repeat(width - 2)}${'┘\n'}`;
+    }
+  }
+  return str;
 }
 
 
@@ -225,8 +240,23 @@ function getRectangleString(/* width, height */) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  const sdvig = 'u'.charCodeAt(0) - 'h'.charCodeAt(0);
+  let newStr = '';
+  for (let i = 0; i < str.length; i++) {
+    let t = str.charCodeAt(i);
+    if (((t > 64) && (t < 91)) || ((t > 96) && (t < 123))) {
+      if ((((t + sdvig) > 90) && (t <= 90)) || (t + sdvig) > 122) {
+        t += sdvig - 26;
+      } else {
+        t += sdvig;
+      }
+      newStr += String.fromCharCode(t);
+    } else {
+      newStr += str[i];
+    }
+  }
+  return newStr;
 }
 
 /**
@@ -242,8 +272,14 @@ function encodeToRot13(/* str */) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  if (typeof (value) === 'string') {
+    return true;
+  }
+  if (typeof (value) === 'object') {
+    return value instanceof String;
+  }
+  return false;
 }
 
 
@@ -271,8 +307,45 @@ function isString(/* value */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const mast = value[value.length - 1];
+  let mastChunk;
+  let index;
+  switch (mast) {
+    case '♣':
+      mastChunk = 0;
+      break;
+    case '♦':
+      mastChunk = 1;
+      break;
+    case '♥':
+      mastChunk = 2;
+      break;
+    default:
+      mastChunk = 3;
+      break;
+  }
+  switch (value[0]) {
+    case 'A':
+      index = 0;
+      break;
+    case '1':
+      index = 9;
+      break;
+    case 'J':
+      index = 10;
+      break;
+    case 'Q':
+      index = 11;
+      break;
+    case 'K':
+      index = 12;
+      break;
+    default:
+      index = +value[0] - 1;
+      break;
+  }
+  return index + 13 * mastChunk;
 }
 
 
