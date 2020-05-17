@@ -111,16 +111,21 @@ function timeSpanToString(startDate, endDate) {
 function angleBetweenClockHands(date) {
   const mins = date.getUTCMinutes();
   const hours = date.getUTCHours() % 12;
-  const minutesA = ((Math.PI * 2 * (mins / 60)));
-  const hoursA = (((Math.PI * 2 * hours) + minutesA) / 12);
+  // const minutesA = ((Math.PI * 2 * (mins / 60)));
+  // const hoursA = (((Math.PI * 2 * hours) + minutesA) / 12);
+  // let result = (hoursA > minutesA ? hoursA - minutesA : minutesA - hoursA);
+  // result = result > Math.PI ? result - Math.PI : result;
+  // if (result === 0.8726646259971647) {
+  //   result = 0.8726646259971648;
+  // } else if (result === 0.47996554429844096) {
+  //   result = 0.4799655442984406;
+  // }
+  // return result;
+  const minutesA = (mins * 6);
+  const hoursA = (30 * hours) + (mins / 2);
   let result = (hoursA > minutesA ? hoursA - minutesA : minutesA - hoursA);
-  result = result > Math.PI ? result - Math.PI : result;
-  if (result === 0.8726646259971647) {
-    result = 0.8726646259971648;
-  } else if (result === 0.47996554429844096) {
-    result = 0.4799655442984406;
-  }
-  return result;
+  result = result > 180 ? result - 180 : result;
+  return ((result * 2 * Math.PI) / 360);
 }
 
 
