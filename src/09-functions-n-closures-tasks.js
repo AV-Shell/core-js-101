@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable linebreak-style */
 
 /* *********************************************************************************************
@@ -68,16 +69,10 @@ function getPowerFunction(exponent) {
  */
 function getPolynom(...args) {
   return function polynom(x) {
-    switch (args.length) {
-      case 3:
-        return args[0] * (x ** 2) + args[1] * x + args[2];
-      case 2:
-        return args[0] * x + args[1];
-      case 1:
-        return args[0];
-      default:
-        return null;
+    if (args.length) {
+      return args.reduceRight((ac, item, ind, arr) => (ac + item * (x ** (arr.length - ind - 1))));
     }
+    return null;
   };
 }
 
@@ -96,9 +91,9 @@ function getPolynom(...args) {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(func) {
-  const result = func();
-  return function res() {
+function memoize(f) {
+  const result = f();
+  return function memoizer() {
     return result;
   };
 }
@@ -120,14 +115,15 @@ function memoize(func) {
  * retryer() => 2
  */
 function retry(func, attempts) {
-  let i;
   return function ret() {
-    for (i = 0; i <= attempts; i += 1) {
+    for (let i = 0; i <= attempts; i += 1) {
       try {
         return func();
-      } catch (e) { i += 0; }
+      } catch (e) {
+        i += 0;
+      }
     }
-    return i - 1;
+    return attempts;
   };
 }
 
@@ -154,16 +150,11 @@ function retry(func, attempts) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(func, logFunc) {
-  let start = '';
-  let end = '';
-  let result = null;
+function logger(f, logF) {
   return function wrapper(...args) {
-    start = `${func.name}(${JSON.stringify(args).slice(1, -1)}) starts`;
-    logFunc(start);
-    result = func(...args);
-    end = `${func.name}(${JSON.stringify(args).slice(1, -1)}) ends`;
-    logFunc(end);
+    logF(`${f.name}(${JSON.stringify(args).slice(1, -1)}) starts`);
+    const result = f(...args);
+    logF(`${f.name}(${JSON.stringify(args).slice(1, -1)}) ends`);
     return result;
   };
 }
@@ -206,13 +197,12 @@ function partialUsingArguments(fn, ...args1) {
  *   getId10() => 11
  */
 function getIdGeneratorFunction(startFrom) {
-  let counter = startFrom - 1;
+  let counter = startFrom;
   return function generator() {
-    counter += 1;
-    return counter;
+    // eslint-disable-next-line no-plusplus
+    return counter++;
   };
 }
-
 
 module.exports = {
   getComposition,
